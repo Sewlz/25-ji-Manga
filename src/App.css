@@ -1,0 +1,25 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  list-style: none;
+}
+.app {
+  display: flex;
+}
+
+.main-content {
+  margin-left: 200px; /* Sidebar width */
+  padding: 20px;
+  flex-grow: 1;
+}
+ul,
+ol {
+  padding: 0;
+  margin: 0;
+}
+
+li {
+  margin: 0;
+  padding: 0;
+}
