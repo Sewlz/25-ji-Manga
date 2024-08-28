@@ -1,0 +1,17 @@
+.listItem {
+  display: flex;
+  align-items: center;
+  margin: 10px;
+}
+.listItem > a {
+  color: white !important ;
+  padding: 3%;
+}
+.listItem > img {
+  width: 100px;
+  height: 150px;
+}
+.list-wrapper {
+  display: flex;
+  flex-direction: column;
+}
