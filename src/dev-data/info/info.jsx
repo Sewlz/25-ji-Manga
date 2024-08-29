@@ -16,7 +16,13 @@ function Info() {
           method: "GET",
           url: `https://api.mangadex.org/manga/${id}/feed`,
         });
-        setfeed(resp.data.data);
+        const sortedFeed = resp.data.data.sort((a, b) => {
+          const chapterA = parseFloat(a.attributes.chapter);
+          const chapterB = parseFloat(b.attributes.chapter);
+          return chapterA - chapterB;
+        });
+
+        setfeed(sortedFeed);
       } catch (error) {
         setError("Error fetching chapters.");
         console.error("Error fetching manga:", error);
@@ -34,7 +40,8 @@ function Info() {
         {feed.map((chapter) => (
           <li key={chapter.id}>
             <a href={`http://localhost:5173/reading?id=${chapter.id}`}>
-              {chapter.attributes.volume} - {chapter.id}
+              {chapter.attributes.translatedLanguage} - Chapter:{" "}
+              {chapter.attributes.chapter} - Id: {chapter.id}
             </a>
           </li>
         ))}
