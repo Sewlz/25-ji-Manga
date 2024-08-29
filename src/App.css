@@ -9,7 +9,7 @@
 }
 
 .main-content {
-  margin-left: 200px; /* Sidebar width */
+  margin-left: 200px;
   padding: 20px;
   flex-grow: 1;
 }

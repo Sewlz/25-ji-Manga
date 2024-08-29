@@ -43,7 +43,7 @@ function Home() {
         setMangaTitles(titles);
         setMangaIds(ids);
         setCoverUrls(covers.filter(Boolean));
-        console.log(ids);
+        console.log(titles);
       } catch (error) {
         setError("Error fetching manga.");
         console.error("Error fetching manga:", error);
@@ -60,7 +60,6 @@ function Home() {
   const handleClick = (event) => {
     const selectedId = event.currentTarget.id;
     setGlobId(selectedId);
-    console.log(selectedId);
   };
 
   return (
@@ -74,7 +73,7 @@ function Home() {
             <div className="listItem" key={id} id={id} onClick={handleClick}>
               <img src={coverUrls[index]} alt="" />
               <a href={`http://localhost:5173/info?id=${id}`}>
-                {mangaTitles} - {id}
+                {mangaTitles[index]} - {id}
               </a>
             </div>
           ))}
