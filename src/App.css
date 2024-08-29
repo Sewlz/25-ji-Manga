@@ -9,8 +9,9 @@
 }
 
 .main-content {
-  margin-left: 200px;
-  padding: 20px;
+  padding-top: 100px;
+  padding-left: 20px;
+  padding-right: 20px;
   flex-grow: 1;
 }
 ul,

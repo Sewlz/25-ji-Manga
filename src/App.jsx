@@ -6,12 +6,13 @@ import Info from "./dev-data/info/info.jsx";
 import Reading from "./dev-data/reading/reading.jsx";
 import "./App.css";
 import axios from "axios";
+import Header from "./dev-data/header/header.jsx";
 
 function App() {
   return (
     <Router>
+      <Header />
       <div className="app">
-        <Sidebar />
         <div className="main-content">
           <Routes>
             <Route path="/" element={<Home />} />
