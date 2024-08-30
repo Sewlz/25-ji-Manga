@@ -82,6 +82,7 @@ function Home() {
       <div className="title-wrapper">
         <span>Popular Titles</span>
       </div>
+
       <div className="popular-wrapper">
         <Swiper
           slidesPerView={1}
@@ -96,21 +97,21 @@ function Home() {
         >
           {coverUrls.map((url, index) => (
             <SwiperSlide key={index}>
-              <div
-                className="popular-card"
-                style={{
-                  backgroundImage: `url(${coverUrls[index]})`,
-                  backgroundSize: "cover",
-                }}
-              >
-                <a href={`http://localhost:5173/info?id=${mangaIds[index]}`}>
+              <a href={`http://localhost:5173/info?id=${mangaIds[index]}`}>
+                <div
+                  className="popular-card"
+                  style={{
+                    backgroundImage: `url(${coverUrls[index]})`,
+                    backgroundSize: "cover",
+                  }}
+                >
                   <img className="popular-img" src={url} alt="" />
-                </a>
-                <div className="popular-info">
-                  <h3>{mangaTitles[index]}</h3>
-                  <p>{mangaDescriptons[index]}</p>
+                  <div className="popular-info">
+                    <h3>{mangaTitles[index]}</h3>
+                    <p>{mangaDescriptons[index]}</p>
+                  </div>
                 </div>
-              </div>
+              </a>
             </SwiperSlide>
           ))}
         </Swiper>
