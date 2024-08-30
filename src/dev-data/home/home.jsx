@@ -13,6 +13,7 @@ function Home() {
   const [mangaIds, setMangaIds] = useState([]);
   const [mangaTitles, setMangaTitles] = useState([]);
   const [mangaDescriptons, setMangaDescriptions] = useState([]);
+  const [mangaAuthor, setMangaAuthor] = useState([]);
   const [coverUrls, setCoverUrls] = useState([]);
   const [error, setError] = useState(null);
   useEffect(() => {
@@ -45,6 +46,22 @@ function Home() {
           const firstDes = desObj[firstDesKey];
           return firstDes;
         });
+        //get author
+        const author = await Promise.all(
+          resp.data.data.map(async (manga) => {
+            const authorRel = manga.relationships.find(
+              (rel) => rel.type === "author"
+            );
+            if (authorRel) {
+              const authorResp = await axios.get(
+                `https://api.mangadex.org/author/${authorRel.id}`
+              );
+              const authorName = authorResp.data.data.attributes.name;
+              return authorName;
+            }
+            return null;
+          })
+        );
         //get cover arts
         const covers = await Promise.all(
           resp.data.data.map(async (manga) => {
@@ -65,6 +82,7 @@ function Home() {
         setMangaTitles(titles);
         setMangaIds(ids);
         setMangaDescriptions(description);
+        setMangaAuthor(author);
         setCoverUrls(covers.filter(Boolean));
         console.log(titles);
       } catch (error) {
@@ -76,6 +94,12 @@ function Home() {
   }, []);
   if (error) {
     return <div>{error}</div>;
+  }
+  function sendData(index) {
+    sessionStorage.setItem("coverUrl", coverUrls[index]);
+    sessionStorage.setItem("mangaTitle", mangaTitles[index]);
+    sessionStorage.setItem("mangaDescription", mangaDescriptons[index]);
+    sessionStorage.setItem("mangaAuthor", mangaAuthor[index]);
   }
   return (
     <>
@@ -96,7 +120,7 @@ function Home() {
           className="mySwiper"
         >
           {coverUrls.map((url, index) => (
-            <SwiperSlide key={index}>
+            <SwiperSlide key={index} onClick={() => sendData(index)}>
               <a href={`http://localhost:5173/info?id=${mangaIds[index]}`}>
                 <div
                   className="popular-card"

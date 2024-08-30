@@ -9,10 +9,6 @@ function Latest() {
   const [mangaAuthor, setMangaAuthor] = useState([]);
   const [coverUrls, setCoverUrls] = useState([]);
   const [error, setError] = useState(null);
-  const handleClick = (event) => {
-    const selectedId = event.currentTarget.id;
-    setGlobId(selectedId);
-  };
   useEffect(() => {
     const fetchManga = async () => {
       //get ids and titles
@@ -78,6 +74,12 @@ function Latest() {
   if (error) {
     return <div>{error}</div>;
   }
+  function sendData(index) {
+    sessionStorage.setItem("coverUrl", coverUrls[index]);
+    sessionStorage.setItem("mangaTitle", mangaTitles[index]);
+    sessionStorage.setItem("mangaDescription", mangaDescriptons[index]);
+    sessionStorage.setItem("mangaAuthor", mangaAuthor[index]);
+  }
   return (
     <>
       <div className="latest-uploads">
@@ -86,7 +88,12 @@ function Latest() {
       <div className="list-wrapper">
         {mangaIds.map((id, index) => (
           <a href={`http://localhost:5173/info?id=${id}`}>
-            <div className="listItem" key={id} id={id} onClick={handleClick}>
+            <div
+              className="listItem"
+              key={id}
+              id={id}
+              onClick={() => sendData(index)}
+            >
               <img src={coverUrls[index]} alt="" />
               <div className="listItemText">
                 <h3>{mangaTitles[index]}</h3>
