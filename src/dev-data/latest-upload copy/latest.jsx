@@ -6,7 +6,6 @@ function Latest() {
   //manga datas
   const [mangaIds, setMangaIds] = useState([]);
   const [mangaTitles, setMangaTitles] = useState([]);
-  const [mangaAuthor, setMangaAuthor] = useState([]);
   const [coverUrls, setCoverUrls] = useState([]);
   const [error, setError] = useState(null);
   const handleClick = (event) => {
@@ -46,26 +45,9 @@ function Latest() {
             return null;
           })
         );
-        //get author
-        const author = await Promise.all(
-          resp.data.data.map(async (manga) => {
-            const authorRel = manga.relationships.find(
-              (rel) => rel.type === "author"
-            );
-            if (authorRel) {
-              const authorResp = await axios.get(
-                `https://api.mangadex.org/author/${authorRel.id}`
-              );
-              const authorName = authorResp.data.data.attributes.name;
-              return authorName;
-            }
-            return null;
-          })
-        );
         //set data
         setMangaTitles(titles);
         setMangaIds(ids);
-        setMangaAuthor(author);
         setCoverUrls(covers.filter(Boolean));
         console.log(titles);
       } catch (error) {
@@ -85,15 +67,12 @@ function Latest() {
       </div>
       <div className="list-wrapper">
         {mangaIds.map((id, index) => (
-          <a href={`http://localhost:5173/info?id=${id}`}>
-            <div className="listItem" key={id} id={id} onClick={handleClick}>
-              <img src={coverUrls[index]} alt="" />
-              <div className="listItemText">
-                <h3>{mangaTitles[index]}</h3>
-                <p>Author: {mangaAuthor[index]}</p>
-              </div>
-            </div>
-          </a>
+          <div className="listItem" key={id} id={id} onClick={handleClick}>
+            <img src={coverUrls[index]} alt="" />
+            <a href={`http://localhost:5173/info?id=${id}`}>
+              {mangaTitles[index]}
+            </a>
+          </div>
         ))}
       </div>
     </>
