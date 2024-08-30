@@ -11,6 +11,38 @@ ReactComic is a beginner-friendly React application designed to help you browse 
 - **Chapter Navigation:** Browse through available chapters for the selected manga.
 - **Responsive Design:** Works smoothly on desktops, tablets, and smartphones.
 
+**Prerequisites**
+
+Ensure you have Node.js and npm installed on your machine.
+
+**Steps**
+
+1. **Create a new Vite project**:
+   
+   ```bash
+   npm create vite@latest
+3. **Navigate to your project directory**:
+   
+   ```bash
+   cd your-project-name
+5. **Install dependencies**:
+   
+   ```bash
+   npm install
+7. **Install Axios**:
+   
+   ```bash
+   npm install axios
+9. **Install Swiper**
+    ```bash
+   npm install swiper
+10. **Running the Project**
+    ```bash
+    npm run dev
+
+Open your browser and go to http://localhost:5173/ to see your project running.
+
+**Project Tree:**
 ```
 react-25jimanga
 ├─ .gitignore
