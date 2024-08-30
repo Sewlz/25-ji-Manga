@@ -11,3 +11,49 @@ ReactComic is a beginner-friendly React application designed to help you browse 
 - **Chapter Navigation:** Browse through available chapters for the selected manga.
 - **Responsive Design:** Works smoothly on desktops, tablets, and smartphones.
 
+```
+react-25jimanga
+├─ .gitignore
+├─ eslint.config.js
+├─ index.html
+├─ package-lock.json
+├─ package.json
+├─ public
+│  └─ vite.svg
+├─ README.md
+├─ src
+│  ├─ app
+│  │  └─ controller
+│  ├─ App.css
+│  ├─ App.jsx
+│  ├─ assets
+│  │  ├─ og-image.webp
+│  │  ├─ react.svg
+│  │  └─ shortcutIcon.png
+│  ├─ dev-data
+│  │  ├─ auth
+│  │  │  └─ auth.jsx
+│  │  ├─ header
+│  │  │  ├─ header.css
+│  │  │  └─ header.jsx
+│  │  ├─ home
+│  │  │  ├─ home.css
+│  │  │  └─ home.jsx
+│  │  ├─ info
+│  │  │  └─ info.jsx
+│  │  ├─ latest-upload
+│  │  │  ├─ latest.css
+│  │  │  └─ latest.jsx
+│  │  ├─ reading
+│  │  │  ├─ reading.css
+│  │  │  └─ reading.jsx
+│  │  ├─ search
+│  │  │  └─ search.jsx
+│  │  └─ sidebar
+│  │     ├─ sidebar.css
+│  │     └─ sidebar.jsx
+│  ├─ index.css
+│  └─ main.jsx
+└─ vite.config.js
+
+```
