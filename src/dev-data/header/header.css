@@ -76,3 +76,25 @@ body {
 .search-bar button:hover {
   background-color: #e67e22;
 }
+
+.search-container {
+  display: block;
+}
+.search-results {
+  position: absolute;
+  z-index: 1;
+  background-color: #00000066;
+  width: 19%;
+}
+.search-results ul li {
+  box-sizing: border-box;
+  overflow: hidden;
+  max-width: 300px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-decoration: none;
+  padding: 5px;
+}
+.search-results ul li a {
+  color: white;
+}
