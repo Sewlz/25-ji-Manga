@@ -66,7 +66,7 @@ function Reading() {
       <h1>
         {title} Chapter: {chapterNumber}
       </h1>
-      <select onChange={handleChange} id="">
+      <select value={id} onChange={handleChange} id="">
         {feed.map((chapter) => {
           const url = chapter.id;
           return (
