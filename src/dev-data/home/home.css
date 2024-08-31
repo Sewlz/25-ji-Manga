@@ -100,17 +100,6 @@ h3 {
 }
 
 @media (max-width: 1024px) {
-  /*latest css*/
-  .list-wrapper {
-    display: flex !important;
-    flex-direction: column;
-  }
-  /*info css*/
-  .info-wrapper {
-    display: flex !important;
-    flex-direction: column;
-  }
-  /*home css*/
   .swiper {
     width: 100%;
     height: 100%;
@@ -118,15 +107,22 @@ h3 {
   .swiper-wrapper {
     max-width: 300px !important;
   }
+  .popular-wrapper {
+    height: 450px;
+  }
   .popular-card {
     display: flex !important;
     flex-direction: column;
+    gap: 5px;
     align-items: center;
     text-align: center;
     width: 100%;
   }
   .popular-info > p {
     display: none;
+  }
+  .popular-info > h3 {
+    font-size: 20px !important;
   }
   .search-bar button {
     display: none;

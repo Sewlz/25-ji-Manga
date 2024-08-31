@@ -35,3 +35,9 @@
   padding: 2%;
   color: white;
 }
+@media (max-width: 1024px) {
+  .list-wrapper {
+    display: flex !important;
+    flex-direction: column;
+  }
+}
