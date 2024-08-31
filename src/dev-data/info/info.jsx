@@ -15,6 +15,12 @@ function Info() {
   const mangaTitle = sessionStorage.getItem("mangaTitle");
   const mangaAuthor = sessionStorage.getItem("mangaAuthor");
 
+  function sendInfo(index) {
+    sessionStorage.setItem("currentNumber", feed[index].attributes.chapter);
+    sessionStorage.setItem("chapterTitle", mangaTitle);
+    sessionStorage.setItem("feed", JSON.stringify(feed));
+  }
+
   useEffect(() => {
     const fetchChapters = async () => {
       try {
@@ -27,7 +33,6 @@ function Info() {
           const chapterB = parseFloat(b.attributes.chapter);
           return chapterA - chapterB;
         });
-
         setfeed(sortedFeed);
       } catch (error) {
         setError("Error fetching chapters.");
@@ -58,10 +63,10 @@ function Info() {
       <div className="chapters-wrapper">
         <h1>Manga Chapters</h1>
         <ul>
-          {feed.map((chapter) => (
-            <li key={chapter.id}>
+          {feed.map((chapter, index) => (
+            <li key={chapter.id} onClick={() => sendInfo(index)}>
               <a href={`http://localhost:5173/reading?id=${chapter.id}`}>
-                {chapter.attributes.translatedLanguage} - Chapter:{" "}
+                {chapter.attributes.translatedLanguage} - Chapter:
                 {chapter.attributes.chapter}
               </a>
             </li>
