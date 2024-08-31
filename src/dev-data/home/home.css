@@ -110,10 +110,15 @@ h3 {
   .popular-wrapper {
     height: 450px;
   }
+  .popular-info {
+    margin: auto;
+  }
+  .popular-img {
+    margin: auto;
+  }
   .popular-card {
     display: flex !important;
     flex-direction: column;
-    gap: 5px;
     align-items: center;
     text-align: center;
     width: 100%;
