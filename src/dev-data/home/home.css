@@ -19,7 +19,7 @@ swiper-slide img {
   object-fit: cover;
 }
 .swiper-wrapper {
-  width: 1450px;
+  max-width: 1450px;
 }
 .popular-wrapper {
   display: flex;
@@ -97,4 +97,41 @@ swiper-slide img {
 .popular-info > p,
 h3 {
   color: white !important;
+}
+
+@media (max-width: 1024px) {
+  /*latest css*/
+  .list-wrapper {
+    display: flex !important;
+    flex-direction: column;
+  }
+  /*info css*/
+  .info-wrapper {
+    display: flex !important;
+    flex-direction: column;
+  }
+  /*home css*/
+  .swiper {
+    width: 100%;
+    height: 100%;
+  }
+  .swiper-wrapper {
+    max-width: 300px !important;
+  }
+  .popular-card {
+    display: flex !important;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+  }
+  .popular-info > p {
+    display: none;
+  }
+  .search-bar button {
+    display: none;
+  }
+  .search-bar input {
+    border-radius: 5px !important;
+  }
 }
