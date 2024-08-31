@@ -54,8 +54,6 @@ react-25jimanga
 │  └─ vite.svg
 ├─ README.md
 ├─ src
-│  ├─ app
-│  │  └─ controller
 │  ├─ App.css
 │  ├─ App.jsx
 │  ├─ assets
@@ -63,8 +61,6 @@ react-25jimanga
 │  │  ├─ react.svg
 │  │  └─ shortcutIcon.png
 │  ├─ dev-data
-│  │  ├─ auth
-│  │  │  └─ auth.jsx
 │  │  ├─ header
 │  │  │  ├─ header.css
 │  │  │  └─ header.jsx
