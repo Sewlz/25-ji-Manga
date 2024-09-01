@@ -75,11 +75,6 @@ react-25jimanga
 │  │  ├─ reading
 │  │  │  ├─ reading.css
 │  │  │  └─ reading.jsx
-│  │  ├─ search
-│  │  │  └─ search.jsx
-│  │  └─ sidebar
-│  │     ├─ sidebar.css
-│  │     └─ sidebar.jsx
 │  ├─ index.css
 │  └─ main.jsx
 └─ vite.config.js
