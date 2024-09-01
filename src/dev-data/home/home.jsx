@@ -7,6 +7,7 @@ import "swiper/css/autoplay";
 import "swiper/css";
 import "./home.css";
 import Latest from "../latest-upload/latest";
+import PopularByGernes from "../popular-by-gernes/popbygernes";
 
 function Home() {
   //manga datas
@@ -104,7 +105,9 @@ function Home() {
   return (
     <>
       <div className="title-wrapper">
-        <span>Popular Titles</span>
+        <span>
+          <i className="fas fa-star"></i> Popular Titles
+        </span>
       </div>
 
       <div className="popular-wrapper">
@@ -141,6 +144,7 @@ function Home() {
         </Swiper>
       </div>
       <Latest />
+      <PopularByGernes />
     </>
   );
 }
