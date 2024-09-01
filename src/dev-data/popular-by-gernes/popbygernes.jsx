@@ -11,12 +11,31 @@ function PopularByGernes() {
   const [mangaAuthor, setMangaAuthor] = useState([]);
   const [coverUrls, setCoverUrls] = useState([]);
   const [error, setError] = useState(null);
-  const [selectedGern, setSelectedGern] = useState(
-    "0234a31e-a729-4e28-9d6a-3f87c4966b9e"
-  );
+  const [selectedGern, setSelectedGern] = useState("");
+  useEffect(() => {
+    const fetchTags = async () => {
+      try {
+        const resp = await axios.get("https://api.mangadex.org/manga/tag");
+        const ids = resp.data.data.map((tag) => tag.id);
+        const names = resp.data.data.map((tag) => tag.attributes.name.en);
+
+        setTagIds(ids);
+        setTagNames(names);
+
+        if (!selectedGern && ids.length > 0) {
+          setSelectedGern(ids[0]);
+        }
+      } catch (error) {
+        setError("Error fetching tags.");
+        console.error("Error fetching tags:", error);
+      }
+    };
+    fetchTags();
+  }, []);
+
   useEffect(() => {
     const fetchManga = async () => {
-      //get ids and titles
+      if (!selectedGern) return;
       try {
         const resp = await axios({
           method: "GET",
@@ -29,16 +48,14 @@ function PopularByGernes() {
           },
           url: `https://api.mangadex.org/manga`,
         });
+
         const ids = resp.data.data.map((manga) => manga.id);
-        //get titles
         const titles = resp.data.data.map((manga) => {
           const titleObj = manga.attributes.title;
-          // Access the first title in the object
-          const firstTitleKey = Object.keys(titleObj)[0]; // Get the first language key
-          const firstTitle = titleObj[firstTitleKey]; // Get the title associated with that key
-          return firstTitle;
+          const firstTitleKey = Object.keys(titleObj)[0];
+          return titleObj[firstTitleKey];
         });
-        //get cover arts
+
         const covers = await Promise.all(
           resp.data.data.map(async (manga) => {
             const coverArtRel = manga.relationships.find(
@@ -54,8 +71,8 @@ function PopularByGernes() {
             return null;
           })
         );
-        //get author
-        const author = await Promise.all(
+
+        const authors = await Promise.all(
           resp.data.data.map(async (manga) => {
             const authorRel = manga.relationships.find(
               (rel) => rel.type === "author"
@@ -64,40 +81,23 @@ function PopularByGernes() {
               const authorResp = await axios.get(
                 `https://api.mangadex.org/author/${authorRel.id}`
               );
-              const authorName = authorResp.data.data.attributes.name;
-              return authorName;
+              return authorResp.data.data.attributes.name;
             }
             return null;
           })
         );
-        //set data
+
         setMangaTitles(titles);
         setMangaIds(ids);
-        setMangaAuthor(author);
+        setMangaAuthor(authors);
         setCoverUrls(covers.filter(Boolean));
-        console.log(titles);
       } catch (error) {
         setError("Error fetching manga.");
         console.error("Error fetching manga:", error);
       }
     };
-    const fetchTags = async () => {
-      try {
-        const resp = await axios({
-          method: "GET",
-          url: "https://api.mangadex.org/manga/tag",
-        });
-        const ids = resp.data.data.map((manga) => manga.id);
-        const name = resp.data.data.map((manga) => manga.attributes.name.en);
-        setTagIds(ids);
-        setTagNames(name);
-      } catch (error) {
-        setError("Error fetching tags.");
-        console.error("Error fetching tags:", error);
-      }
-    };
+
     fetchManga();
-    fetchTags();
   }, [selectedGern]);
   if (error) {
     return <div>{error}</div>;
