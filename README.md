@@ -88,10 +88,10 @@ react-25jimanga
 
 > Info Screenshot
 <div align="center">
-  <img width="100%" src="https://github.com/Sewlz/25-ji-Manga/blob/master/public/screenshot/home-screenshot.png">
+  <img width="100%" src="https://github.com/Sewlz/25-ji-Manga/blob/master/public/screenshot/info-screenshot.png">
 </div>
 
 > Reading Screenshot
 <div align="center">
-  <img width="100%" src="https://github.com/Sewlz/25-ji-Manga/blob/master/public/screenshot/home-screenshot.png">
+  <img width="100%" src="https://github.com/Sewlz/25-ji-Manga/blob/master/public/screenshot/reading-screenshot.png">
 </div>
