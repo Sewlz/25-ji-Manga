@@ -124,7 +124,7 @@ function PopularByGernes() {
     <>
       <div className="latest-uploads">
         <span>
-          <i className="fas fa-upload"></i> Popular By Gernes
+          <i class="fa-solid fa-list"></i> Popular By Gernes
         </span>
         <select id="gernSelect" onChange={getGerns} values={selectedGern}>
           {tagIds.map((id, index) => (

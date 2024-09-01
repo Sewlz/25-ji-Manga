@@ -35,6 +35,18 @@
   padding: 2%;
   color: white;
 }
+.list-wrapper a .listItem:hover {
+  background-color: #505050;
+  transform: translateY(-3px);
+}
+
+.list-wrapper a .listItem:active {
+  background-color: #666666;
+  transform: translateY(1px);
+}
+.listItem {
+  transition: background-color 0.3s, transform 0.3s;
+}
 @media (max-width: 1024px) {
   .list-wrapper {
     display: flex !important;

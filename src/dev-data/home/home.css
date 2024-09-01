@@ -98,7 +98,6 @@ swiper-slide img {
 h3 {
   color: white !important;
 }
-
 @media (max-width: 1024px) {
   .swiper {
     width: 100%;

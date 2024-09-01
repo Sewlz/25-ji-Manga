@@ -133,4 +133,7 @@
     flex-direction: column;
     align-items: center;
   }
+  .manga-info > h1 {
+    font-size: x-large;
+  }
 }
