@@ -3,6 +3,7 @@ import axios from "axios";
 import "./header.css";
 import logo from "../../assets/og-image.webp";
 const Header = () => {
+  const baseDomain = window.location.origin;
   const [searchTitle, setSearchTitle] = useState("");
   const [mangaIds, setMangaIds] = useState([]);
   const [mangaTitle, setMangaTitle] = useState([]);
@@ -53,7 +54,7 @@ const Header = () => {
             onChange={handleTextChange}
           />
           <button type="submit">
-            <img src="/path/to/search-icon.png" alt="Search" />
+            <span>Search</span>
           </button>
         </div>
         <div

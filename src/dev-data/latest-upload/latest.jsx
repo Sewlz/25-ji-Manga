@@ -87,7 +87,7 @@ function Latest() {
       </div>
       <div className="list-wrapper">
         {mangaIds.map((id, index) => (
-          <a href={`http://localhost:5173/info?id=${id}`}>
+          <a href={`/info?id=${id}`}>
             <div
               className="listItem"
               key={id}

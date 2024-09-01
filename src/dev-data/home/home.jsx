@@ -124,7 +124,7 @@ function Home() {
         >
           {coverUrls.map((url, index) => (
             <SwiperSlide key={index} onClick={() => sendData(index)}>
-              <a href={`http://localhost:5173/info?id=${mangaIds[index]}`}>
+              <a href={`/info?id=${mangaIds[index]}`}>
                 <div
                   className="popular-card"
                   style={{

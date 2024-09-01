@@ -65,7 +65,7 @@ function Info() {
         <ul>
           {feed.map((chapter, index) => (
             <li key={chapter.id} onClick={() => sendInfo(index)}>
-              <a href={`http://localhost:5173/reading?id=${chapter.id}`}>
+              <a href={`/reading?id=${chapter.id}`}>
                 {chapter.attributes.translatedLanguage} - Chapter:
                 {chapter.attributes.chapter}
               </a>
