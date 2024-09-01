@@ -9,6 +9,7 @@ function PopularByGernes() {
   const [tagIds, setTagIds] = useState([]);
   const [tagNames, setTagNames] = useState([]);
   const [mangaAuthor, setMangaAuthor] = useState([]);
+  const [mangaDescriptons, setMangaDescriptions] = useState([]);
   const [coverUrls, setCoverUrls] = useState([]);
   const [error, setError] = useState(null);
   const [selectedGern, setSelectedGern] = useState("");
@@ -86,10 +87,17 @@ function PopularByGernes() {
             return null;
           })
         );
-
+        //get descriptions
+        const description = resp.data.data.map((manga) => {
+          const desObj = manga.attributes.description;
+          const firstDesKey = Object.keys(desObj)[0];
+          const firstDes = desObj[firstDesKey];
+          return firstDes;
+        });
         setMangaTitles(titles);
         setMangaIds(ids);
         setMangaAuthor(authors);
+        setMangaDescriptions(description);
         setCoverUrls(covers.filter(Boolean));
       } catch (error) {
         setError("Error fetching manga.");

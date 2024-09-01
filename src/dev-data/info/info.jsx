@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
 import "./info.css";
+import ReadMore from "../readmore/readmore";
 function Info() {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
@@ -41,7 +42,7 @@ function Info() {
     };
     fetchChapters();
   }, [id]);
-  
+
   if (error) {
     return <div>{error}</div>;
   }
@@ -58,7 +59,7 @@ function Info() {
         <div className="manga-info">
           <h1>{mangaTitle}</h1>
           <p>{mangaAuthor}</p>
-          <p>{mangaDes}</p>
+          <ReadMore text={mangaDes} maxHeight={195} />
         </div>
       </div>
       <div className="chapters-wrapper">

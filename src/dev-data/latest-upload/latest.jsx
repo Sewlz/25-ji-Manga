@@ -7,6 +7,7 @@ function Latest() {
   const [mangaIds, setMangaIds] = useState([]);
   const [mangaTitles, setMangaTitles] = useState([]);
   const [mangaAuthor, setMangaAuthor] = useState([]);
+  const [mangaDescriptons, setMangaDescriptions] = useState([]);
   const [coverUrls, setCoverUrls] = useState([]);
   const [error, setError] = useState(null);
   useEffect(() => {
@@ -58,10 +59,18 @@ function Latest() {
             return null;
           })
         );
+        //get descriptions
+        const description = resp.data.data.map((manga) => {
+          const desObj = manga.attributes.description;
+          const firstDesKey = Object.keys(desObj)[0];
+          const firstDes = desObj[firstDesKey];
+          return firstDes;
+        });
         //set data
         setMangaTitles(titles);
         setMangaIds(ids);
         setMangaAuthor(author);
+        setMangaDescriptions(description);
         setCoverUrls(covers.filter(Boolean));
         console.log(titles);
       } catch (error) {
