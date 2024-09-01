@@ -41,6 +41,7 @@ function Info() {
     };
     fetchChapters();
   }, [id]);
+  
   if (error) {
     return <div>{error}</div>;
   }

@@ -7,6 +7,9 @@ const Header = () => {
   const [searchTitle, setSearchTitle] = useState("");
   const [mangaIds, setMangaIds] = useState([]);
   const [mangaTitle, setMangaTitle] = useState([]);
+  const [mangaDescriptons, setMangaDescriptions] = useState([]);
+  const [mangaAuthor, setMangaAuthor] = useState([]);
+  const [coverUrls, setCoverUrls] = useState([]);
   const [showResults, setShowResults] = useState(false);
   useEffect(() => {
     const fetchManga = async () => {
@@ -25,18 +28,65 @@ const Header = () => {
           const firstTitle = titleObj[titleKey];
           return firstTitle;
         });
+        //get descriptions
+        const description = resp.data.data.map((manga) => {
+          const desObj = manga.attributes.description;
+          const firstDesKey = Object.keys(desObj)[0];
+          const firstDes = desObj[firstDesKey];
+          return firstDes;
+        });
+        //get author
+        const author = await Promise.all(
+          resp.data.data.map(async (manga) => {
+            const authorRel = manga.relationships.find(
+              (rel) => rel.type === "author"
+            );
+            if (authorRel) {
+              const authorResp = await axios.get(
+                `https://api.mangadex.org/author/${authorRel.id}`
+              );
+              const authorName = authorResp.data.data.attributes.name;
+              return authorName;
+            }
+            return null;
+          })
+        );
+        //get cover arts
+        const covers = await Promise.all(
+          resp.data.data.map(async (manga) => {
+            const coverArtRel = manga.relationships.find(
+              (rel) => rel.type === "cover_art"
+            );
+            if (coverArtRel) {
+              const coverResp = await axios.get(
+                `https://api.mangadex.org/cover/${coverArtRel.id}`
+              );
+              const coverFileName = coverResp.data.data.attributes.fileName;
+              return `https://uploads.mangadex.org/covers/${manga.id}/${coverFileName}`;
+            }
+            return null;
+          })
+        );
         setMangaIds(ids);
         setMangaTitle(titles);
+        setMangaDescriptions(description);
+        setMangaAuthor(author);
+        setCoverUrls(covers.filter(Boolean));
       } catch (error) {
         console.log("Error fetching manga:" + error);
       }
     };
-
     fetchManga();
   }, [searchTitle]);
   function handleTextChange(event) {
     setSearchTitle(event.target.value);
     setShowResults(event.target.value !== "");
+  }
+  function sendData(index) {
+    sessionStorage.setItem("coverUrl", coverUrls[index]);
+    sessionStorage.setItem("mangaTitle", mangaTitle[index]);
+    sessionStorage.setItem("mangaDescription", mangaDescriptons[index]);
+    sessionStorage.setItem("mangaAuthor", mangaAuthor[index]);
   }
   return (
     <header className="manga-header">
@@ -63,7 +113,7 @@ const Header = () => {
         >
           <ul>
             {mangaIds.map((id, index) => (
-              <li key={id}>
+              <li key={id} onClick={() => sendData(index)}>
                 <a href={`/info?id=${id}`}>{mangaTitle[index]}</a>
               </li>
             ))}

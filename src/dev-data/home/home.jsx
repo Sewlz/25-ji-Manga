@@ -85,7 +85,6 @@ function Home() {
         setMangaDescriptions(description);
         setMangaAuthor(author);
         setCoverUrls(covers.filter(Boolean));
-        console.log(titles);
       } catch (error) {
         setError("Error fetching manga.");
         console.error("Error fetching manga:", error);
