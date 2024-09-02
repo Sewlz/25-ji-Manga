@@ -38,10 +38,11 @@ function Reading() {
   useEffect(() => {
     const prefetchNextChapter = async () => {
       if (feed && feed.length > 0) {
-        const nextChapter = feed.find((ch) => ch.id === nextChapterId);
-        if (nextChapter) {
-          const nextChapterUrl = `https://api.mangadex.org/at-home/server/${nextChapter.id}`;
-          await axios.get(nextChapterUrl); // Prefetching the next chapter data
+        const currentIndex = feed.findIndex((ch) => ch.id === id);
+        if (currentIndex !== -1 && currentIndex < feed.length - 1) {
+          const nextChapterId = feed[currentIndex + 1].id;
+          const nextChapterUrl = `https://api.mangadex.org/at-home/server/${nextChapterId}`;
+          await axios.get(nextChapterUrl);
         }
       }
     };
