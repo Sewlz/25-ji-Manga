@@ -6,31 +6,47 @@ function PopularByGernes() {
   //manga datas
   const [mangaIds, setMangaIds] = useState([]);
   const [mangaTitles, setMangaTitles] = useState([]);
-  const [tagIds, setTagIds] = useState([]);
-  const [tagNames, setTagNames] = useState([]);
   const [mangaAuthor, setMangaAuthor] = useState([]);
   const [mangaDescriptons, setMangaDescriptions] = useState([]);
   const [coverUrls, setCoverUrls] = useState([]);
   const [error, setError] = useState(null);
   const [selectedGern, setSelectedGern] = useState("");
+  const [tagIds, setTagIds] = useState([]);
+  const [tagNames, setTagNames] = useState([]);
   useEffect(() => {
     const fetchTags = async () => {
       try {
-        const resp = await axios.get("https://api.mangadex.org/manga/tag");
-        const ids = resp.data.data.map((tag) => tag.id);
-        const names = resp.data.data.map((tag) => tag.attributes.name.en);
+        const storedIds = localStorage.getItem("tagIds");
+        const storedNames = localStorage.getItem("tagNames");
 
-        setTagIds(ids);
-        setTagNames(names);
+        if (storedIds && storedNames) {
+          setTagIds(JSON.parse(storedIds));
+          setTagNames(JSON.parse(storedNames));
 
-        if (!selectedGern && ids.length > 0) {
-          setSelectedGern(ids[0]);
+          if (!selectedGern && JSON.parse(storedIds).length > 0) {
+            setSelectedGern(JSON.parse(storedIds)[0]);
+          }
+        } else {
+          const resp = await axios.get("https://api.mangadex.org/manga/tag");
+          const ids = resp.data.data.map((tag) => tag.id);
+          const names = resp.data.data.map((tag) => tag.attributes.name.en);
+
+          setTagIds(ids);
+          setTagNames(names);
+
+          localStorage.setItem("tagIds", JSON.stringify(ids));
+          localStorage.setItem("tagNames", JSON.stringify(names));
+
+          if (!selectedGern && ids.length > 0) {
+            setSelectedGern(ids[0]);
+          }
         }
       } catch (error) {
         setError("Error fetching tags.");
         console.error("Error fetching tags:", error);
       }
     };
+
     fetchTags();
   }, []);
 
