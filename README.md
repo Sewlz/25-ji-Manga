@@ -83,15 +83,15 @@ react-25jimanga
 **Screenshots:**
 > Home Screenshot
 <div align="center">
-  <img width="100%" src="https://github.com/Sewlz/25-ji-Manga/blob/master/public/home-screenshot.png" alt="Banner">
+  <img width="100%" src="https://github.com/Sewlz/25-ji-Manga/blob/master/public/screenshot/home-screenshot.png">
 </div>
 
 > Info Screenshot
 <div align="center">
-  <img width="100%" src="https://github.com/Sewlz/25-ji-Manga/blob/master/public/info-screenshot.png" alt="Banner">
+  <img width="100%" src="https://github.com/Sewlz/25-ji-Manga/blob/master/public/screenshot/info-screenshot.png">
 </div>
 
 > Reading Screenshot
 <div align="center">
-  <img width="100%" src="https://github.com/Sewlz/25-ji-Manga/blob/master/public/reading-screenshot.png" alt="Banner">
+  <img width="100%" src="https://github.com/Sewlz/25-ji-Manga/blob/master/public/screenshot/reading-screenshot.png">
 </div>
