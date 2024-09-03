@@ -58,7 +58,10 @@ To create a CORS proxy and use it in a React.js application, follow these steps:
      ```
 
    ```
-
+   - CORS Middleware: It allows requests from any origin by setting the appropriate headers.
+   - Proxy Endpoint: It sets up an endpoint /proxy that forwards the request to the target URL specified in the query parameter.
+   - User-Agent header: Adds a custom User-Agent header to the proxied requests, identifying the client making the request.
+   - Server: It starts an Express server listening on port 8080 (or the port specified in the environment variable).
    ```
 
 3. **Run the CORS Proxy Server:**
@@ -86,16 +89,14 @@ To create a CORS proxy and use it in a React.js application, follow these steps:
       ```javascript
       import React, { useEffect, useState } from "react";
       import axios from "axios";
-      ```
-
-    function ProxyDemo() {
-    // State variables
-    const [limit, setLimit] = useState(6);
-    const [order, setOrder] = useState({ followedCount: "desc" });
-    const [queryParams, setQueryParams] = useState("");
-    const [selectedGern, setSelectedGern] = useState("");
-    const apiUrl = "https://api.mangadex.org/manga";
-    const proxyUrl = `http://localhost:8080/proxy?url=`;
+       function ProxyDemo() {
+       // State variables
+       const [limit, setLimit] = useState(6);
+       const [order, setOrder] = useState({ followedCount: "desc" });
+       const [queryParams, setQueryParams] = useState("");
+       const [selectedGern, setSelectedGern] = useState("");
+       const apiUrl = "https://api.mangadex.org/manga";
+       const proxyUrl = `http://localhost:8080/proxy?url=`;
 
         useEffect(() => {
         	// Params constructing
@@ -131,13 +132,9 @@ To create a CORS proxy and use it in a React.js application, follow these steps:
         		{/* Add your JSX here */}
         	</div>
         );
-
-    }
-
-    export default ProxyDemo;
-
+       }
+       export default ProxyDemo;
     ```
-
     - This component fetches data from the MangaDex API through your CORS proxy and displays it.
     ```
 
