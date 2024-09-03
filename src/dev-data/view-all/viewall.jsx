@@ -1,8 +1,8 @@
 import React, { useState, createContext, useEffect } from "react";
 import axios from "axios";
-import "./latest.css";
+import "./viewall.css";
 
-function Latest() {
+function Viewall() {
   //manga datas
   const [mangaIds, setMangaIds] = useState([]);
   const [mangaTitles, setMangaTitles] = useState([]);
@@ -10,6 +10,8 @@ function Latest() {
   const [mangaDescriptons, setMangaDescriptions] = useState([]);
   const [coverUrls, setCoverUrls] = useState([]);
   const [error, setError] = useState(null);
+  const [limit, setLimit] = useState(20);
+  const [offset, setOffset] = useState(0);
   useEffect(() => {
     const fetchManga = async () => {
       //get ids and titles
@@ -18,8 +20,8 @@ function Latest() {
           method: "GET",
           url: `https://api.mangadex.org/manga`,
           params: {
-            limit: 10,
-            offset: 0,
+            limit: limit,
+            offset: offset,
           },
         });
         const ids = resp.data.data.map((manga) => manga.id);
@@ -83,7 +85,7 @@ function Latest() {
       }
     };
     fetchManga();
-  }, []);
+  }, [offset, limit]);
   if (error) {
     return <div>{error}</div>;
   }
@@ -92,6 +94,14 @@ function Latest() {
     sessionStorage.setItem("mangaTitle", mangaTitles[index]);
     sessionStorage.setItem("mangaDescription", mangaDescriptons[index]);
     sessionStorage.setItem("mangaAuthor", mangaAuthor[index]);
+  }
+  function nextPage() {
+    setOffset(offset + limit);
+  }
+  function previousPage() {
+    if (offset > 0) {
+      setOffset(offset - limit);
+    }
   }
   return (
     <>
@@ -116,12 +126,15 @@ function Latest() {
           </a>
         ))}
       </div>
-      <div className="view-all-wrapper">
-        <a href="/viewall">
-          <button className="view-all-button">View All</button>
-        </a>
+      <div className="pagination-wrapper">
+        <button onClick={previousPage}>
+          <i class="fa-solid fa-arrow-left"></i> Previous Page
+        </button>
+        <button onClick={nextPage}>
+          Next Page <i class="fa-solid fa-arrow-right"></i>
+        </button>
       </div>
     </>
   );
 }
-export default Latest;
+export default Viewall;

@@ -18,31 +18,46 @@ Ensure you have Node.js and npm installed on your machine.
 **Steps**
 
 1. **Create a new Vite project**:
-   
+
    ```bash
    npm create vite@latest
-3. **Navigate to your project directory**:
-   
+   ```
+
+2. **Navigate to your project directory**:
+
    ```bash
    cd your-project-name
-5. **Install dependencies**:
-   
+   ```
+
+3. **Install dependencies**:
+
    ```bash
    npm install
-7. **Install Axios**:
-   
+   ```
+
+4. **Install Axios**:
+
    ```bash
    npm install axios
-9. **Install Swiper**
-    ```bash
+   ```
+
+5. **Install Swiper**
+   ```bash
    npm install swiper
-10. **Running the Project**
-    ```bash
-    npm run dev
+   ```
+6. **Install react-paginate**
+   ```bash
+   npm install react-paginate --save
+   ```
+7. **Running the Project**
+   ```bash
+   npm run dev
+   ```
 
 Open your browser and go to http://localhost:5173/ to see your project running.
 
 **Project Tree:**
+
 ```
 react-25jimanga
 ├─ .gitignore
@@ -80,18 +95,23 @@ react-25jimanga
 └─ vite.config.js
 
 ```
+
 **Screenshots:**
+
 > Home Screenshot
+
 <div align="center">
   <img width="100%" src="https://github.com/Sewlz/25-ji-Manga/blob/master/public/screenshot/home-screenshot.png">
 </div>
 
 > Info Screenshot
+
 <div align="center">
   <img width="100%" src="https://github.com/Sewlz/25-ji-Manga/blob/master/public/screenshot/info-screenshot.png">
 </div>
 
 > Reading Screenshot
+
 <div align="center">
   <img width="100%" src="https://github.com/Sewlz/25-ji-Manga/blob/master/public/screenshot/reading-screenshot.png">
 </div>

@@ -53,7 +53,8 @@
     flex-direction: column;
   }
 }
-.view-all-wrapper {
-  justify-content: center;
+.pagination-wrapper {
   display: flex;
+  justify-content: center;
+  gap: 5%;
 }
