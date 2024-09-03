@@ -1,123 +1,62 @@
-import React, { useState, createContext, useEffect } from "react";
-import axios from "axios";
+import React, { useEffect, useState } from "react";
 import "./viewall.css";
+import useViewAll from "../view-all-hook/useViewAll";
+import { useLocation } from "react-router-dom";
 
 function Viewall() {
-  //manga datas
-  const [mangaIds, setMangaIds] = useState([]);
-  const [mangaTitles, setMangaTitles] = useState([]);
-  const [mangaAuthor, setMangaAuthor] = useState([]);
-  const [mangaDescriptons, setMangaDescriptions] = useState([]);
-  const [coverUrls, setCoverUrls] = useState([]);
-  const [error, setError] = useState(null);
-  const [limit, setLimit] = useState(20);
+  const [limit, setLimit] = useState(10);
   const [offset, setOffset] = useState(0);
+
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const tagId = queryParams.get("tag");
+
+  // Set params state based on tagId and pagination settings
+  const [params, setParams] = useState(() => ({
+    limit,
+    offset,
+    ...(tagId && { includedTags: [tagId], order: { followedCount: "desc" } }),
+  }));
+
   useEffect(() => {
-    const fetchManga = async () => {
-      //get ids and titles
-      try {
-        const resp = await axios({
-          method: "GET",
-          url: `https://api.mangadex.org/manga`,
-          params: {
-            limit: limit,
-            offset: offset,
-          },
-        });
-        const ids = resp.data.data.map((manga) => manga.id);
-        //get titles
-        const titles = resp.data.data.map((manga) => {
-          const titleObj = manga.attributes.title;
-          // Access the first title in the object
-          const firstTitleKey = Object.keys(titleObj)[0]; // Get the first language key
-          const firstTitle = titleObj[firstTitleKey]; // Get the title associated with that key
-          return firstTitle;
-        });
-        //get cover arts
-        const covers = await Promise.all(
-          resp.data.data.map(async (manga) => {
-            const coverArtRel = manga.relationships.find(
-              (rel) => rel.type === "cover_art"
-            );
-            if (coverArtRel) {
-              const coverResp = await axios.get(
-                `https://api.mangadex.org/cover/${coverArtRel.id}`
-              );
-              const coverFileName = coverResp.data.data.attributes.fileName;
-              return `https://uploads.mangadex.org/covers/${manga.id}/${coverFileName}`;
-            }
-            return null;
-          })
-        );
-        //get author
-        const author = await Promise.all(
-          resp.data.data.map(async (manga) => {
-            const authorRel = manga.relationships.find(
-              (rel) => rel.type === "author"
-            );
-            if (authorRel) {
-              const authorResp = await axios.get(
-                `https://api.mangadex.org/author/${authorRel.id}`
-              );
-              const authorName = authorResp.data.data.attributes.name;
-              return authorName;
-            }
-            return null;
-          })
-        );
-        //get descriptions
-        const description = resp.data.data.map((manga) => {
-          const desObj = manga.attributes.description;
-          const firstDesKey = Object.keys(desObj)[0];
-          const firstDes = desObj[firstDesKey];
-          return firstDes;
-        });
-        //set data
-        setMangaTitles(titles);
-        setMangaIds(ids);
-        setMangaAuthor(author);
-        setMangaDescriptions(description);
-        setCoverUrls(covers.filter(Boolean));
-        console.log(titles);
-      } catch (error) {
-        setError("Error fetching manga.");
-        console.error("Error fetching manga:", error);
-      }
-    };
-    fetchManga();
-  }, [offset, limit]);
-  if (error) {
-    return <div>{error}</div>;
-  }
-  function sendData(index) {
+    setParams((prevParams) => ({
+      ...prevParams,
+      offset,
+      ...(tagId
+        ? { includedTags: [tagId], order: { followedCount: "desc" } }
+        : { includedTags: undefined, order: undefined }),
+    }));
+  }, [tagId, offset]);
+
+  const { mangaData, error, isLoading } = useViewAll(params);
+  const { mangaIds, mangaTitles, mangaDescriptions, mangaAuthor, coverUrls } =
+    mangaData;
+
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>{error}</div>;
+  if (!mangaIds || mangaIds.length === 0) return <div>No manga available.</div>;
+
+  const sendData = (index) => {
     sessionStorage.setItem("coverUrl", coverUrls[index]);
     sessionStorage.setItem("mangaTitle", mangaTitles[index]);
-    sessionStorage.setItem("mangaDescription", mangaDescriptons[index]);
+    sessionStorage.setItem("mangaDescription", mangaDescriptions[index]);
     sessionStorage.setItem("mangaAuthor", mangaAuthor[index]);
-  }
-  function nextPage() {
-    setOffset(offset + limit);
-  }
-  function previousPage() {
-    if (offset > 0) {
-      setOffset(offset - limit);
-    }
-  }
+  };
+
+  const nextPage = () => setOffset((prevOffset) => prevOffset + limit);
+  const previousPage = () =>
+    setOffset((prevOffset) => Math.max(0, prevOffset - limit));
+
   return (
     <>
       <div className="latest-uploads">
-        <i className="fas fa-upload"></i> Latest Uploads
+        <i className="fas fa-upload"></i> View All
       </div>
       <div className="list-wrapper">
         {mangaIds.map((id, index) => (
-          <a href={`/info?id=${id}`}>
-            <div
-              className="listItem"
-              key={id}
-              id={id}
-              onClick={() => sendData(index)}
-            >
-              <img src={coverUrls[index]} alt="" />
+          <a href={`/info?id=${id}`} key={id}>
+            <div className="listItem" id={id} onClick={() => sendData(index)}>
+              <img src={coverUrls[index]} alt={mangaTitles[index]} />
               <div className="listItemText">
                 <h3>{mangaTitles[index]}</h3>
                 <p>Author: {mangaAuthor[index]}</p>
@@ -127,14 +66,15 @@ function Viewall() {
         ))}
       </div>
       <div className="pagination-wrapper">
-        <button onClick={previousPage}>
-          <i class="fa-solid fa-arrow-left"></i> Previous Page
+        <button onClick={previousPage} aria-label="Previous Page">
+          <i className="fa-solid fa-arrow-left"></i> Previous Page
         </button>
-        <button onClick={nextPage}>
-          Next Page <i class="fa-solid fa-arrow-right"></i>
+        <button onClick={nextPage} aria-label="Next Page">
+          Next Page <i className="fa-solid fa-arrow-right"></i>
         </button>
       </div>
     </>
   );
 }
+
 export default Viewall;

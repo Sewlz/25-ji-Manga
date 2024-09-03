@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import "swiper/css/autoplay";
@@ -24,7 +23,7 @@ function Home() {
         const resp = await axios({
           method: "GET",
           params: {
-            limit: 10,
+            limit: 5,
             order: {
               followedCount: "desc",
             },

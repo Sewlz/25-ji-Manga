@@ -18,7 +18,7 @@ function Latest() {
           method: "GET",
           url: `https://api.mangadex.org/manga`,
           params: {
-            limit: 10,
+            limit: 6,
             offset: 0,
           },
         });
@@ -118,7 +118,11 @@ function Latest() {
       </div>
       <div className="view-all-wrapper">
         <a href="/viewall">
-          <button className="view-all-button">View All</button>
+          <button
+            className="view-all-button"
+          >
+            View All
+          </button>
         </a>
       </div>
     </>

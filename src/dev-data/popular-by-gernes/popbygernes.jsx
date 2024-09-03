@@ -57,7 +57,7 @@ function PopularByGernes() {
         const resp = await axios({
           method: "GET",
           params: {
-            limit: 10,
+            limit: 6,
             includedTags: [selectedGern],
             order: {
               followedCount: "desc",
@@ -167,6 +167,11 @@ function PopularByGernes() {
             </div>
           </a>
         ))}
+      </div>
+      <div className="pagination-wrapper">
+        <a href={`/viewall?tag=${selectedGern}`}>
+          <button>View More</button>
+        </a>
       </div>
     </>
   );
