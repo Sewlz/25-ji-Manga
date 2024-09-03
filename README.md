@@ -66,6 +66,7 @@ react-25jimanga
 ├─ package-lock.json
 ├─ package.json
 ├─ public
+|  └─ screenshot
 │  └─ vite.svg
 ├─ README.md
 ├─ src
