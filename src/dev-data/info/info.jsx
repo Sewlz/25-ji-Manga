@@ -15,7 +15,10 @@ function Info() {
   const mangaDes = sessionStorage.getItem("mangaDescription");
   const mangaTitle = sessionStorage.getItem("mangaTitle");
   const mangaAuthor = sessionStorage.getItem("mangaAuthor");
-
+  const apiUrl = `https://api.mangadex.org/manga/${id}/feed`;
+  const proxyUrl = `http://localhost:8080/proxy?url=${encodeURIComponent(
+    apiUrl
+  )}`;
   function sendInfo(index) {
     sessionStorage.setItem("currentNumber", feed[index].attributes.chapter);
     sessionStorage.setItem("chapterTitle", mangaTitle);
@@ -25,10 +28,7 @@ function Info() {
   useEffect(() => {
     const fetchChapters = async () => {
       try {
-        const resp = await axios({
-          method: "GET",
-          url: `https://api.mangadex.org/manga/${id}/feed`,
-        });
+        const resp = await axios.get(`${proxyUrl}`);
         const sortedFeed = resp.data.data.sort((a, b) => {
           const chapterA = parseFloat(a.attributes.chapter);
           const chapterB = parseFloat(b.attributes.chapter);

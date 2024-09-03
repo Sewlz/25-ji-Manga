@@ -1,18 +1,17 @@
 import React, { useState, createContext, useEffect } from "react";
 import axios from "axios";
 import "./popbygernes.css";
-
+import useViewAll from "../view-all-hook/useViewAll";
 function PopularByGernes() {
-  //manga datas
-  const [mangaIds, setMangaIds] = useState([]);
-  const [mangaTitles, setMangaTitles] = useState([]);
-  const [mangaAuthor, setMangaAuthor] = useState([]);
-  const [mangaDescriptons, setMangaDescriptions] = useState([]);
-  const [coverUrls, setCoverUrls] = useState([]);
-  const [error, setError] = useState(null);
+  //Tags Virables
   const [selectedGern, setSelectedGern] = useState("");
   const [tagIds, setTagIds] = useState([]);
   const [tagNames, setTagNames] = useState([]);
+  //Params Virables
+  const [limit, setLimit] = useState(6);
+  const [order, setOrder] = useState({ followedCount: "desc" });
+  const [queryParams, setQueryParams] = useState("");
+  //Fetching Tags From Local
   useEffect(() => {
     const fetchTags = async () => {
       try {
@@ -27,7 +26,7 @@ function PopularByGernes() {
             setSelectedGern(JSON.parse(storedIds)[0]);
           }
         } else {
-          const resp = await axios.get("https://api.mangadex.org/manga/tag");
+          const resp = await axios.get("../dev-data/tags.json");
           const ids = resp.data.data.map((tag) => tag.id);
           const names = resp.data.data.map((tag) => tag.attributes.name.en);
 
@@ -49,92 +48,39 @@ function PopularByGernes() {
 
     fetchTags();
   }, []);
-
+  //Params constructing
   useEffect(() => {
-    const fetchManga = async () => {
-      if (!selectedGern) return;
-      try {
-        const resp = await axios({
-          method: "GET",
-          params: {
-            limit: 6,
-            includedTags: [selectedGern],
-            order: {
-              followedCount: "desc",
-            },
-          },
-          url: `https://api.mangadex.org/manga`,
-        });
+    const params = new URLSearchParams();
 
-        const ids = resp.data.data.map((manga) => manga.id);
-        const titles = resp.data.data.map((manga) => {
-          const titleObj = manga.attributes.title;
-          const firstTitleKey = Object.keys(titleObj)[0];
-          return titleObj[firstTitleKey];
-        });
+    params.append("limit", limit);
 
-        const covers = await Promise.all(
-          resp.data.data.map(async (manga) => {
-            const coverArtRel = manga.relationships.find(
-              (rel) => rel.type === "cover_art"
-            );
-            if (coverArtRel) {
-              const coverResp = await axios.get(
-                `https://api.mangadex.org/cover/${coverArtRel.id}`
-              );
-              const coverFileName = coverResp.data.data.attributes.fileName;
-              return `https://uploads.mangadex.org/covers/${manga.id}/${coverFileName}`;
-            }
-            return null;
-          })
-        );
+    if (selectedGern) {
+      params.append("includedTags[]", selectedGern);
+    }
+    Object.keys(order).forEach((key) => {
+      params.append(`order[${key}]`, order[key]);
+    });
 
-        const authors = await Promise.all(
-          resp.data.data.map(async (manga) => {
-            const authorRel = manga.relationships.find(
-              (rel) => rel.type === "author"
-            );
-            if (authorRel) {
-              const authorResp = await axios.get(
-                `https://api.mangadex.org/author/${authorRel.id}`
-              );
-              return authorResp.data.data.attributes.name;
-            }
-            return null;
-          })
-        );
-        //get descriptions
-        const description = resp.data.data.map((manga) => {
-          const desObj = manga.attributes.description;
-          const firstDesKey = Object.keys(desObj)[0];
-          const firstDes = desObj[firstDesKey];
-          return firstDes;
-        });
-        setMangaTitles(titles);
-        setMangaIds(ids);
-        setMangaAuthor(authors);
-        setMangaDescriptions(description);
-        setCoverUrls(covers.filter(Boolean));
-      } catch (error) {
-        setError("Error fetching manga.");
-        console.error("Error fetching manga:", error);
-      }
-    };
-
-    fetchManga();
-  }, [selectedGern]);
-  if (error) {
-    return <div>{error}</div>;
-  }
+    setQueryParams(params.toString());
+  }, [limit, selectedGern, order]);
+  //Manga Fetching Through Custom Hook
+  const { mangaData, error, isLoading } = useViewAll(queryParams);  
+  const { mangaIds, mangaTitles, mangaDescriptions, mangaAuthor, coverUrls } =
+    mangaData;
+  //Send Data To Session Storage
   function sendData(index) {
     sessionStorage.setItem("coverUrl", coverUrls[index]);
     sessionStorage.setItem("mangaTitle", mangaTitles[index]);
-    sessionStorage.setItem("mangaDescription", mangaDescriptons[index]);
+    sessionStorage.setItem("mangaDescription", mangaDescriptions[index]);
     sessionStorage.setItem("mangaAuthor", mangaAuthor[index]);
   }
   function getGerns(event) {
     setSelectedGern(event.target.value);
     console.log(selectedGern);
+  }
+  //Rendering Components
+  if (error) {
+    return <div>{error}</div>;
   }
   return (
     <>

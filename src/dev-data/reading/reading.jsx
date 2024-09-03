@@ -3,6 +3,8 @@ import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
 import "./reading.css";
 function Reading() {
+  const proxyUrl = `http://localhost:8080/proxy?url=`;
+
   const [chapterData, setChapterData] = useState([]);
   const [chapterHash, setChapterHash] = useState("");
   const [error, setError] = useState(null);
@@ -20,7 +22,9 @@ function Reading() {
       try {
         const resp = await axios({
           method: "GET",
-          url: `https://api.mangadex.org/at-home/server/${id}`,
+          url: `${proxyUrl}${encodeURIComponent(
+            `https://api.mangadex.org/at-home/server/${id}`
+          )}`,
         });
         setChapterData(resp.data.chapter.data);
         setChapterHash(resp.data.chapter.hash);
@@ -41,7 +45,9 @@ function Reading() {
         const currentIndex = feed.findIndex((ch) => ch.id === id);
         if (currentIndex !== -1 && currentIndex < feed.length - 1) {
           const nextChapterId = feed[currentIndex + 1].id;
-          const nextChapterUrl = `https://api.mangadex.org/at-home/server/${nextChapterId}`;
+          const nextChapterUrl = `${proxyUrl}${encodeURIComponent(
+            `https://api.mangadex.org/at-home/server/${nextChapterId}`
+          )}`;
           await axios.get(nextChapterUrl);
         }
       }

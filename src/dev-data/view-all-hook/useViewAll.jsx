@@ -2,6 +2,9 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 
 const useViewAll = (params) => {
+  const apiUrl = "https://api.mangadex.org/manga";
+  const proxyUrl = `http://localhost:8080/proxy?url=`;
+
   const [mangaData, setMangaData] = useState({
     mangaIds: [],
     mangaTitles: [],
@@ -15,24 +18,38 @@ const useViewAll = (params) => {
   const fetchMangaData = async (retryCount = 0) => {
     try {
       setIsLoading(true);
-      console.log("Request Params:", params);
-      const resp = await axios.get(`https://api.mangadex.org/manga`, {
-        params,
-      });
+      const fullUrl = `${apiUrl}?${params.toString()}`;
+      const resp = await axios.get(`${proxyUrl}${encodeURIComponent(fullUrl)}`);
       const ids = resp.data.data.map((manga) => manga.id);
-
+      //get titles
       const titles = resp.data.data.map((manga) => {
         const titleObj = manga.attributes.title;
+        // Access the first title in the object
         const firstTitleKey = Object.keys(titleObj)[0];
-        return titleObj[firstTitleKey];
+        const firstTitle = titleObj[firstTitleKey];
+        return firstTitle;
       });
-
-      const descriptions = resp.data.data.map((manga) => {
-        const desObj = manga.attributes.description;
-        const firstDesKey = Object.keys(desObj)[0];
-        return desObj[firstDesKey];
-      });
-
+      //get cover arts
+      const covers = await Promise.all(
+        resp.data.data.map(async (manga) => {
+          const coverArtRel = manga.relationships.find(
+            (rel) => rel.type === "cover_art"
+          );
+          if (coverArtRel) {
+            const coverResp = await axios.get(
+              `${proxyUrl}${encodeURIComponent(
+                `https://api.mangadex.org/cover/${coverArtRel.id}`
+              )}`
+            );
+            const coverFileName = coverResp.data.data.attributes.fileName;
+            return `${proxyUrl}${encodeURIComponent(
+              `https://uploads.mangadex.org/covers/${manga.id}/${coverFileName}`
+            )}`;
+          }
+          return null;
+        })
+      );
+      //get author
       const authors = await Promise.all(
         resp.data.data.map(async (manga) => {
           const authorRel = manga.relationships.find(
@@ -42,26 +59,20 @@ const useViewAll = (params) => {
             const authorResp = await axios.get(
               `https://api.mangadex.org/author/${authorRel.id}`
             );
-            return authorResp.data.data.attributes.name;
+            const authorName = authorResp.data.data.attributes.name;
+            return authorName;
           }
           return null;
         })
       );
-
-      const covers = await Promise.all(
-        resp.data.data.map(async (manga) => {
-          const coverArtRel = manga.relationships.find(
-            (rel) => rel.type === "cover_art"
-          );
-          if (coverArtRel) {
-            const coverResp = await axios.get(
-              `https://api.mangadex.org/cover/${coverArtRel.id}`
-            );
-            return `https://uploads.mangadex.org/covers/${manga.id}/${coverResp.data.data.attributes.fileName}`;
-          }
-          return null;
-        })
-      );
+      //get descriptions
+      const descriptions = resp.data.data.map((manga) => {
+        const desObj = manga.attributes.description;
+        const firstDesKey = Object.keys(desObj)[0];
+        const firstDes = desObj[firstDesKey];
+        return firstDes;
+      });
+      //set data
 
       setMangaData({
         mangaIds: ids,

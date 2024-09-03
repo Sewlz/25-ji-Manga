@@ -10,25 +10,22 @@ function Viewall() {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const tagId = queryParams.get("tag");
-
-  // Set params state based on tagId and pagination settings
-  const [params, setParams] = useState(() => ({
-    limit,
-    offset,
-    ...(tagId && { includedTags: [tagId], order: { followedCount: "desc" } }),
-  }));
-
+  const [order, setOrder] = useState({ followedCount: "desc" });
+  const [fullParams, setFullParams] = useState("");
   useEffect(() => {
-    setParams((prevParams) => ({
-      ...prevParams,
-      offset,
-      ...(tagId
-        ? { includedTags: [tagId], order: { followedCount: "desc" } }
-        : { includedTags: undefined, order: undefined }),
-    }));
-  }, [tagId, offset]);
+    const params = new URLSearchParams();
+    params.append("limit", limit);
+    params.append("offset", offset);
+    if (tagId) {
+      params.append("includedTags[]", tagId);
+      Object.keys(order).forEach((key) => {
+        params.append(`order[${key}]`, order[key]);
+      });
+    }
+    setFullParams(params.toString());
+  }, [offset, tagId]);
 
-  const { mangaData, error, isLoading } = useViewAll(params);
+  const { mangaData, error, isLoading } = useViewAll(fullParams);
   const { mangaIds, mangaTitles, mangaDescriptions, mangaAuthor, coverUrls } =
     mangaData;
 

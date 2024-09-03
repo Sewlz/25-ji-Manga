@@ -7,97 +7,30 @@ import "swiper/css";
 import "./home.css";
 import Latest from "../latest-upload/latest";
 import PopularByGernes from "../popular-by-gernes/popbygernes";
-
+import useViewAll from "../view-all-hook/useViewAll";
 function Home() {
-  //manga datas
-  const [mangaIds, setMangaIds] = useState([]);
-  const [mangaTitles, setMangaTitles] = useState([]);
-  const [mangaDescriptons, setMangaDescriptions] = useState([]);
-  const [mangaAuthor, setMangaAuthor] = useState([]);
-  const [coverUrls, setCoverUrls] = useState([]);
-  const [error, setError] = useState(null);
+  const [limit, setLimit] = useState(5);
+  const [order, setOrder] = useState({ followedCount: "desc" });
+  const [queryParams, setQueryParams] = useState("");
   useEffect(() => {
-    const fetchManga = async () => {
-      //get ids and titles
-      try {
-        const resp = await axios({
-          method: "GET",
-          params: {
-            limit: 5,
-            order: {
-              followedCount: "desc",
-            },
-          },
-          url: `https://api.mangadex.org/manga`,
-        });
-        const ids = resp.data.data.map((manga) => manga.id);
-        //get titles
-        const titles = resp.data.data.map((manga) => {
-          const titleObj = manga.attributes.title;
-          // Access the first title in the object
-          const firstTitleKey = Object.keys(titleObj)[0]; // Get the first language key
-          const firstTitle = titleObj[firstTitleKey]; // Get the title associated with that key
-          return firstTitle;
-        });
-        //get descriptions
-        const description = resp.data.data.map((manga) => {
-          const desObj = manga.attributes.description;
-          const firstDesKey = Object.keys(desObj)[0];
-          const firstDes = desObj[firstDesKey];
-          return firstDes;
-        });
-        //get author
-        const author = await Promise.all(
-          resp.data.data.map(async (manga) => {
-            const authorRel = manga.relationships.find(
-              (rel) => rel.type === "author"
-            );
-            if (authorRel) {
-              const authorResp = await axios.get(
-                `https://api.mangadex.org/author/${authorRel.id}`
-              );
-              const authorName = authorResp.data.data.attributes.name;
-              return authorName;
-            }
-            return null;
-          })
-        );
-        //get cover arts
-        const covers = await Promise.all(
-          resp.data.data.map(async (manga) => {
-            const coverArtRel = manga.relationships.find(
-              (rel) => rel.type === "cover_art"
-            );
-            if (coverArtRel) {
-              const coverResp = await axios.get(
-                `https://api.mangadex.org/cover/${coverArtRel.id}`
-              );
-              const coverFileName = coverResp.data.data.attributes.fileName;
-              return `https://uploads.mangadex.org/covers/${manga.id}/${coverFileName}`;
-            }
-            return null;
-          })
-        );
-        //set data
-        setMangaTitles(titles);
-        setMangaIds(ids);
-        setMangaDescriptions(description);
-        setMangaAuthor(author);
-        setCoverUrls(covers.filter(Boolean));
-      } catch (error) {
-        setError("Error fetching manga.");
-        console.error("Error fetching manga:", error);
-      }
-    };
-    fetchManga();
-  }, []);
+    const params = new URLSearchParams();
+    params.append("limit", limit);
+    Object.keys(order).forEach((key) => {
+      params.append(`order[${key}]`, order[key]);
+    });
+    setQueryParams(params.toString());
+  }, [limit, order]);
+  //Manga Fetching Through Custom Hook
+  const { mangaData, error, isLoading } = useViewAll(queryParams);
+  const { mangaIds, mangaTitles, mangaDescriptions, mangaAuthor, coverUrls } =
+    mangaData;
   if (error) {
     return <div>{error}</div>;
   }
   function sendData(index) {
     sessionStorage.setItem("coverUrl", coverUrls[index]);
     sessionStorage.setItem("mangaTitle", mangaTitles[index]);
-    sessionStorage.setItem("mangaDescription", mangaDescriptons[index]);
+    sessionStorage.setItem("mangaDescription", mangaDescriptions[index]);
     sessionStorage.setItem("mangaAuthor", mangaAuthor[index]);
   }
   return (
@@ -133,7 +66,7 @@ function Home() {
                   <img className="popular-img" src={url} alt="" />
                   <div className="popular-info">
                     <h3>{mangaTitles[index]}</h3>
-                    <p>{mangaDescriptons[index]}</p>
+                    <p>{mangaDescriptions[index]}</p>
                   </div>
                 </div>
               </a>
