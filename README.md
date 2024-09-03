@@ -1,4 +1,4 @@
-# 25-ji-Manga
+# <img width="45px" height="45px" src="https://github.com/Sewlz/25-ji-Manga/blob/master/src/assets/og-image.webp"> 25-ji-Manga
 
 **Description:**
 
@@ -45,11 +45,7 @@ Ensure you have Node.js and npm installed on your machine.
    ```bash
    npm install swiper
    ```
-6. **Install react-paginate**
-   ```bash
-   npm install react-paginate --save
-   ```
-7. **Running the Project**
+6. **Running the Project**
    ```bash
    npm run dev
    ```
