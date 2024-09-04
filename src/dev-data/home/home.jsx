@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import "swiper/css/autoplay";
@@ -74,8 +73,6 @@ function Home() {
           ))}
         </Swiper>
       </div>
-      <Latest />
-      <PopularByGernes />
     </>
   );
 }
