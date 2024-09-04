@@ -61,6 +61,11 @@ react-25jimanga
 ├─ index.html
 ├─ package-lock.json
 ├─ package.json
+├─ cors-proxy-server
+|  └─ index.js
+│  └─ package-lock.json
+|  └─ package.json
+│  └─ readme.md
 ├─ public
 |  └─ screenshot
 │  └─ vite.svg
