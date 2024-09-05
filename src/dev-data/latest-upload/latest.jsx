@@ -3,7 +3,14 @@ import axios from "axios";
 import "./latest.css";
 import useViewAll from "../view-all-hook/useViewAll";
 function Latest() {
-  const { mangaData, error, isLoading } = useViewAll({ limit: 6 });
+  const [limit, setLimit] = useState(5);
+  const [queryParams, setQueryParams] = useState("");
+  useEffect(() => {
+    const params = new URLSearchParams();
+    params.append("limit", limit);
+    setQueryParams(params.toString());
+  }, [limit]);
+  const { mangaData, error, isLoading } = useViewAll(queryParams);
   const { mangaIds, mangaTitles, mangaDescriptions, mangaAuthor, coverUrls } =
     mangaData;
   if (error) {

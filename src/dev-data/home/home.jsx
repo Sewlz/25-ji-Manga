@@ -4,8 +4,6 @@ import { Autoplay } from "swiper/modules";
 import "swiper/css/autoplay";
 import "swiper/css";
 import "./home.css";
-import Latest from "../latest-upload/latest";
-import PopularByGernes from "../popular-by-gernes/popbygernes";
 import useViewAll from "../view-all-hook/useViewAll";
 function Home() {
   const [limit, setLimit] = useState(5);
@@ -19,7 +17,6 @@ function Home() {
     });
     setQueryParams(params.toString());
   }, [limit, order]);
-  //Manga Fetching Through Custom Hook
   const { mangaData, error, isLoading } = useViewAll(queryParams);
   const { mangaIds, mangaTitles, mangaDescriptions, mangaAuthor, coverUrls } =
     mangaData;

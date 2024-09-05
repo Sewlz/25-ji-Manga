@@ -27,18 +27,34 @@ function Info() {
 
   useEffect(() => {
     const fetchChapters = async () => {
-      try {
-        const resp = await axios.get(`${proxyUrl}`);
-        const sortedFeed = resp.data.data.sort((a, b) => {
-          const chapterA = parseFloat(a.attributes.chapter);
-          const chapterB = parseFloat(b.attributes.chapter);
-          return chapterA - chapterB;
-        });
-        setfeed(sortedFeed);
-      } catch (error) {
-        setError("Error fetching chapters.");
-        console.error("Error fetching manga:", error);
-      }
+      const fetchChapters = async () => {
+        try {
+          const resp = await axios.get(`${proxyUrl}`);
+          const sortedFeed = resp.data.data.sort((a, b) => {
+            const chapterA = a.attributes.chapter
+              ? parseFloat(a.attributes.chapter)
+              : 0;
+            const chapterB = b.attributes.chapter
+              ? parseFloat(b.attributes.chapter)
+              : 0;
+
+            if (chapterA === chapterB) {
+              const volumeA = a.attributes.volume
+                ? parseFloat(a.attributes.volume)
+                : 0;
+              const volumeB = b.attributes.volume
+                ? parseFloat(b.attributes.volume)
+                : 0;
+              return volumeA - volumeB;
+            }
+
+            return chapterA - chapterB;
+          });
+          setfeed(sortedFeed);
+        } catch (error) {
+          console.error("Error fetching chapters:", error);
+        }
+      };
     };
     fetchChapters();
   }, [id]);
