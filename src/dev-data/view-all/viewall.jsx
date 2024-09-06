@@ -11,7 +11,7 @@ function Viewall() {
   const queryParams = new URLSearchParams(location.search);
   const tagId = queryParams.get("tag");
   const [order, setOrder] = useState({ followedCount: "desc" });
-  const [fullParams, setFullParams] = useState("");
+  const [fullParams, setFullParams] = useState(null);
   useEffect(() => {
     const params = new URLSearchParams();
     params.append("limit", limit);

@@ -7,21 +7,22 @@ import "./home.css";
 import useViewAll from "../view-all-hook/useViewAll";
 function Home() {
   const [limit, setLimit] = useState(5);
-  const [offset, setOffset] = useState(0);
   const [order, setOrder] = useState({ followedCount: "desc" });
-  const [queryParams, setQueryParams] = useState("");
+  const [queryParams, setQueryParams] = useState(null);
+
   useEffect(() => {
     const params = new URLSearchParams();
     params.append("limit", limit);
-    params.append("offset", offset);
     Object.keys(order).forEach((key) => {
       params.append(`order[${key}]`, order[key]);
     });
     setQueryParams(params.toString());
   }, [limit, order]);
+
   const { mangaData, error, isLoading } = useViewAll(queryParams);
   const { mangaIds, mangaTitles, mangaDescriptions, mangaAuthor, coverUrls } =
     mangaData;
+
   if (error) {
     return <div>{error}</div>;
   }

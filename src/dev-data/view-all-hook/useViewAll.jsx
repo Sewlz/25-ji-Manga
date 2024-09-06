@@ -99,7 +99,9 @@ const useViewAll = (params) => {
   };
 
   useEffect(() => {
-    fetchMangaData();
+    if (params) {
+      fetchMangaData();
+    }
   }, [JSON.stringify(params)]);
 
   return { mangaData, error, isLoading };

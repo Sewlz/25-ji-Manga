@@ -1,10 +1,10 @@
-import React, { useState, createContext, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./popbygernes.css";
 import useViewAll from "../view-all-hook/useViewAll";
 function PopularByGernes() {
   //Tags Virables
-  const [selectedGern, setSelectedGern] = useState("");
+  const [selectedGern, setSelectedGern] = useState(null);
   const [tagIds, setTagIds] = useState([]);
   const [tagNames, setTagNames] = useState([]);
   //Params Virables
@@ -64,7 +64,7 @@ function PopularByGernes() {
     setQueryParams(params.toString());
   }, [limit, selectedGern, order]);
   //Manga Fetching Through Custom Hook
-  const { mangaData, error, isLoading } = useViewAll(queryParams);  
+  const { mangaData, error, isLoading } = useViewAll(queryParams);
   const { mangaIds, mangaTitles, mangaDescriptions, mangaAuthor, coverUrls } =
     mangaData;
   //Send Data To Session Storage
@@ -76,7 +76,6 @@ function PopularByGernes() {
   }
   function getGerns(event) {
     setSelectedGern(event.target.value);
-    console.log(selectedGern);
   }
   //Rendering Components
   if (error) {

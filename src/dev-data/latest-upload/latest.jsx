@@ -1,33 +1,30 @@
-import React, { useState, createContext, useEffect } from "react";
-import axios from "axios";
+import React, { useState, useEffect } from "react";
 import "./latest.css";
 import useViewAll from "../view-all-hook/useViewAll";
 function Latest() {
   const [limit, setLimit] = useState(6);
   const [offset, setOffset] = useState(0);
-  const [latestParams, setLatestParams] = useState("");
+  const [latestParams, setLatestParams] = useState(null);
+
   useEffect(() => {
-    const param = new URLSearchParams();
-    param.append("limit", limit);
-    param.append("offset", offset);
-    setLatestParams(param.toString());
-  }, [limit]);
-  const { mangaData: latestData, error, isLoading } = useViewAll(latestParams);
-  const {
-    mangaIds: latestIds,
-    mangaTitles: latestTitles,
-    mangaDescriptions: latestDescriptions,
-    mangaAuthor: latestAuthor,
-    coverUrls: latestUrls,
-  } = latestData;
+    const params = new URLSearchParams();
+    params.append("limit", limit);
+    params.append("offset", offset);
+    setLatestParams(params.toString());
+  }, [limit, offset]);
+
+  const { mangaData, error, isLoading } = useViewAll(latestParams);
+  const { mangaIds, mangaTitles, mangaDescriptions, mangaAuthor, coverUrls } =
+    mangaData;
+
   if (error) {
     return <div>{error}</div>;
   }
   function sendData(index) {
-    sessionStorage.setItem("coverUrl", latestUrls[index]);
-    sessionStorage.setItem("mangaTitle", latestTitles[index]);
-    sessionStorage.setItem("mangaDescription", latestDescriptions[index]);
-    sessionStorage.setItem("mangaAuthor", latestAuthor[index]);
+    sessionStorage.setItem("coverUrl", coverUrls[index]);
+    sessionStorage.setItem("mangaTitle", mangaTitles[index]);
+    sessionStorage.setItem("mangaDescription", mangaDescriptions[index]);
+    sessionStorage.setItem("mangaAuthor", mangaAuthor[index]);
   }
   return (
     <>
@@ -35,7 +32,7 @@ function Latest() {
         <i className="fas fa-upload"></i> Latest Uploads
       </div>
       <div className="list-wrapper">
-        {latestIds.map((id, index) => (
+        {mangaIds.map((id, index) => (
           <a href={`/info?id=${id}`}>
             <div
               className="listItem"
@@ -43,10 +40,10 @@ function Latest() {
               id={id}
               onClick={() => sendData(index)}
             >
-              <img src={latestUrls[index]} alt="" />
+              <img src={coverUrls[index]} alt="" />
               <div className="listItemText">
-                <h3>{latestTitles[index]}</h3>
-                <p>Author: {latestAuthor[index]}</p>
+                <h3>{mangaTitles[index]}</h3>
+                <p>Author: {mangaAuthor[index]}</p>
               </div>
             </div>
           </a>
