@@ -4,23 +4,30 @@ import "./latest.css";
 import useViewAll from "../view-all-hook/useViewAll";
 function Latest() {
   const [limit, setLimit] = useState(6);
-  const [queryParams, setQueryParams] = useState("");
+  const [offset, setOffset] = useState(0);
+  const [latestParams, setLatestParams] = useState("");
   useEffect(() => {
-    const params = new URLSearchParams();
-    params.append("limit", limit);
-    setQueryParams(params.toString());
+    const param = new URLSearchParams();
+    param.append("limit", limit);
+    param.append("offset", offset);
+    setLatestParams(param.toString());
   }, [limit]);
-  const { mangaData, error, isLoading } = useViewAll(queryParams);
-  const { mangaIds, mangaTitles, mangaDescriptions, mangaAuthor, coverUrls } =
-    mangaData;
+  const { mangaData: latestData, error, isLoading } = useViewAll(latestParams);
+  const {
+    mangaIds: latestIds,
+    mangaTitles: latestTitles,
+    mangaDescriptions: latestDescriptions,
+    mangaAuthor: latestAuthor,
+    coverUrls: latestUrls,
+  } = latestData;
   if (error) {
     return <div>{error}</div>;
   }
   function sendData(index) {
-    sessionStorage.setItem("coverUrl", coverUrls[index]);
-    sessionStorage.setItem("mangaTitle", mangaTitles[index]);
-    sessionStorage.setItem("mangaDescription", mangaDescriptions[index]);
-    sessionStorage.setItem("mangaAuthor", mangaAuthor[index]);
+    sessionStorage.setItem("coverUrl", latestUrls[index]);
+    sessionStorage.setItem("mangaTitle", latestTitles[index]);
+    sessionStorage.setItem("mangaDescription", latestDescriptions[index]);
+    sessionStorage.setItem("mangaAuthor", latestAuthor[index]);
   }
   return (
     <>
@@ -28,7 +35,7 @@ function Latest() {
         <i className="fas fa-upload"></i> Latest Uploads
       </div>
       <div className="list-wrapper">
-        {mangaIds.map((id, index) => (
+        {latestIds.map((id, index) => (
           <a href={`/info?id=${id}`}>
             <div
               className="listItem"
@@ -36,10 +43,10 @@ function Latest() {
               id={id}
               onClick={() => sendData(index)}
             >
-              <img src={coverUrls[index]} alt="" />
+              <img src={latestUrls[index]} alt="" />
               <div className="listItemText">
-                <h3>{mangaTitles[index]}</h3>
-                <p>Author: {mangaAuthor[index]}</p>
+                <h3>{latestTitles[index]}</h3>
+                <p>Author: {latestAuthor[index]}</p>
               </div>
             </div>
           </a>
