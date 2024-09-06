@@ -3,7 +3,7 @@ import axios from "axios";
 import "./latest.css";
 import useViewAll from "../view-all-hook/useViewAll";
 function Latest() {
-  const [limit, setLimit] = useState(5);
+  const [limit, setLimit] = useState(6);
   const [queryParams, setQueryParams] = useState("");
   useEffect(() => {
     const params = new URLSearchParams();
