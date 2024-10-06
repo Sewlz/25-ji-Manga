@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import "./ReadMore.css";
+import "../../styles/ReadMore.css";
 
 const ReadMore = ({ text, maxHeight }) => {
   const [isExpanded, setIsExpanded] = useState(false);

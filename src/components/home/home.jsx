@@ -3,8 +3,8 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import "swiper/css/autoplay";
 import "swiper/css";
-import "./home.css";
-import useViewAll from "../view-all-hook/useViewAll";
+import "../../styles/home.css";
+import useViewAll from "../../hooks/view-all-hook/useViewAll";
 function Home() {
   const [limit, setLimit] = useState(5);
   const [order, setOrder] = useState({ followedCount: "desc" });

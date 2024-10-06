@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import "./latest.css";
-import useViewAll from "../view-all-hook/useViewAll";
+import "../../styles/latest.css";
+import useViewAll from "../../hooks/view-all-hook/useViewAll";
 function Latest() {
   const [limit, setLimit] = useState(6);
   const [offset, setOffset] = useState(0);

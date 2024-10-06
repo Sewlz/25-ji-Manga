@@ -1,10 +1,10 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Info from "./dev-data/info/info.jsx";
-import Reading from "./dev-data/reading/reading.jsx";
+import Info from "./components/info/info";
+import Reading from "./components/reading/reading";
 import "./App.css";
-import Header from "./dev-data/header/header.jsx";
-import Viewall from "./dev-data/view-all/viewall.jsx";
-import LandingPage from "./dev-data/landing-page/landing.jsx";
+import Header from "./components/header/header";
+import Viewall from "./components/view-all/viewall";
+import LandingPage from "./pages/landing-page/landing";
 function App() {
   return (
     <Router>

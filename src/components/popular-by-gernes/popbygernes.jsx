@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import "./popbygernes.css";
-import useViewAll from "../view-all-hook/useViewAll";
+import "../../styles/popbygernes.css";
+import useViewAll from "../../hooks/view-all-hook/useViewAll";
 function PopularByGernes() {
   //Tags Virables
   const [selectedGern, setSelectedGern] = useState(null);

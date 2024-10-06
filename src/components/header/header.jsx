@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import "./header.css";
+import "../../styles/header.css";
 import logo from "../../assets/og-image.webp";
-import useViewAll from "../view-all-hook/useViewAll";
+import useViewAll from "../../hooks/view-all-hook/useViewAll";
 const Header = () => {
   const [searchTitle, setSearchTitle] = useState("");
   const [showResults, setShowResults] = useState(false);

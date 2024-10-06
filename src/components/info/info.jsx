@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
-import "./info.css";
+import "../../styles/info.css";
 import ReadMore from "../readmore/readmore";
 function Info() {
   const location = useLocation();

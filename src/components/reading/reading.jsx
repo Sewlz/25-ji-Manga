@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
-import "./reading.css";
+import "../../styles/reading.css";
 function Reading() {
   const proxyUrl = `http://localhost:8080/proxy?url=`;
 

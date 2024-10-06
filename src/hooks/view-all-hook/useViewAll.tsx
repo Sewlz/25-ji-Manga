@@ -1,28 +1,28 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-
-const useViewAll = (params) => {
+import { mangaData } from "../../model/manga";
+const useViewAll = (params:any) => {
   const apiUrl = "https://api.mangadex.org/manga";
   const proxyUrl = `http://localhost:8080/proxy?url=`;
 
-  const [mangaData, setMangaData] = useState({
+  const [mangaData, setMangaData] = useState<mangaData>({
     mangaIds: [],
     mangaTitles: [],
     mangaDescriptions: [],
     mangaAuthor: [],
     coverUrls: [],
   });
-  const [error, setError] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const fetchMangaData = async (retryCount = 0) => {
     try {
       setIsLoading(true);
       const fullUrl = `${apiUrl}?${params.toString()}`;
       const resp = await axios.get(`${proxyUrl}${encodeURIComponent(fullUrl)}`);
-      const ids = resp.data.data.map((manga) => manga.id);
+      const ids = resp.data.data.map((manga: any) => manga.id);
       //get titles
-      const titles = resp.data.data.map((manga) => {
+      const titles = resp.data.data.map((manga: any) => {
         const titleObj = manga.attributes.title;
         // Access the first title in the object
         const firstTitleKey = Object.keys(titleObj)[0];
@@ -31,7 +31,7 @@ const useViewAll = (params) => {
       });
       //get cover arts
       const covers = await Promise.all(
-        resp.data.data.map(async (manga) => {
+        resp.data.data.map(async (manga: any) => {
           const coverArtRel = manga.relationships.find(
             (rel) => rel.type === "cover_art"
           );
@@ -51,9 +51,9 @@ const useViewAll = (params) => {
       );
       //get author
       const authors = await Promise.all(
-        resp.data.data.map(async (manga) => {
+        resp.data.data.map(async (manga: any) => {
           const authorRel = manga.relationships.find(
-            (rel) => rel.type === "author"
+            (rel: any) => rel.type === "author"
           );
           if (authorRel) {
             const authorResp = await axios.get(
@@ -66,7 +66,7 @@ const useViewAll = (params) => {
         })
       );
       //get descriptions
-      const descriptions = resp.data.data.map((manga) => {
+      const descriptions = resp.data.data.map((manga: any) => {
         const desObj = manga.attributes.description;
         const firstDesKey = Object.keys(desObj)[0];
         const firstDes = desObj[firstDesKey];
@@ -82,15 +82,19 @@ const useViewAll = (params) => {
         coverUrls: covers,
       });
     } catch (error) {
-      if (error.response?.status === 429 && retryCount < 5) {
-        const retryAfter = (retryCount + 1) * 2000; // Increase delay with exponential backoff
-        setTimeout(() => fetchMangaData(retryCount + 1), retryAfter);
-      } else if (error.response?.status === 403) {
-        setError(
-          "Access forbidden: Ensure you have the necessary permissions."
-        );
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 429 && retryCount < 5) {
+          const retryAfter = (retryCount + 1) * 2000; // Exponential backoff
+          setTimeout(() => fetchMangaData(retryCount + 1), retryAfter);
+        } else if (error.response?.status === 403) {
+          setError(
+            "Access forbidden: Ensure you have the necessary permissions."
+          );
+        } else {
+          setError("Error fetching manga.");
+        }
       } else {
-        setError("Error fetching manga.");
+        setError("An unknown error occurred.");
       }
       console.error("Error fetching manga:", error);
     } finally {
@@ -102,7 +106,7 @@ const useViewAll = (params) => {
     if (params) {
       fetchMangaData();
     }
-  }, [JSON.stringify(params)]);
+  }, [params]);
 
   return { mangaData, error, isLoading };
 };
